@@ -4,7 +4,7 @@ export default class Community extends HTMLElement {
   static get template() {
     return html`
       <h3><slot name="title">Community</slot></h3>
-      <ul>
+      <ul id="members">
         <slot name="member"></slot>
       </ul>
     `;
@@ -17,6 +17,12 @@ export default class Community extends HTMLElement {
   connectedCallback() {
     const shadow = this.attachShadow({ mode: "open" });
     render(Community.template, shadow);
+  }
+
+  get members() {
+    return Array.from(this.childNodes.values()
+      .filter(child => child.attributes.slot.value === "member")
+      .map(child => child.textContent));
   }
 }
 
